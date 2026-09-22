@@ -1,0 +1,3 @@
+[submodule "doctypehtml"]
+	path = doctypehtml
+	url = git@github.com:zetslief/doctypehtml.git

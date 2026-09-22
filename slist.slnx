@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/doctypehtml/">
+    <Project Path="doctypehtml/DoctypeHtml.Parser/DoctypeHtml.Parser.csproj" />
+  </Folder>
+  <Folder Name="/serv/">
+    <Project Path="serv/serv.csproj" />
+  </Folder>
+</Solution>
