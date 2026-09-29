@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using DoctypeHtml.Parser;
+using HtmlT;
 
 namespace Serv.Methods;
 
@@ -11,7 +11,12 @@ public static class PageMethods
         var (maybeIndex, maybeError) = componentProvider.GetComponent(folder);
         if (maybeError.HasValue) return Results.InternalServerError();
         Debug.Assert(maybeIndex is not null);
-        return Results.Content(File.ReadAllText(maybeIndex.Html), "text/html");
+        var component = new HtmlT.Component(File.ReadAllText(maybeIndex.Html), new Dictionary<string, HtmlT.Component>()
+        {
+            { "sliststyles", new HtmlT.Component(File.ReadAllText(maybeIndex.Css), []) },
+            { "slistscript", new HtmlT.Component(File.ReadAllText(maybeIndex.Js), []) },
+        });
+        return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
 }
 
