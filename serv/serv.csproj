@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\doctypehtml\DoctypeHtml.Parser\DoctypeHtml.Parser.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,10 +1,12 @@
-using Slist.Db;
+using Serv.Db;
+using Serv.Methods;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<SlistDb>();
+builder.Services.AddSingleton<ComponentProvider>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => Results.Content(File.ReadAllText("./pages/index.html"), "text/html"));
-
+app.MapGet("/", PageMethods.GetRootPage);
 app.Run();
