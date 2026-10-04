@@ -11,27 +11,27 @@ public static class PageMethods
         var (maybeIndex, maybeError) = componentProvider.GetComponent(folder);
         if (maybeError.HasValue) return Results.InternalServerError();
         Debug.Assert(maybeIndex is not null);
-        var component = ComponentBuilder.FromHtmlFile(maybeIndex.Html).Value!
-            .AddChild("sliststyles", ComponentBuilder.FromCssFile(maybeIndex.Css).Value!.Build())
-            .AddChild("slistscript", ComponentBuilder.FromJsFile(maybeIndex.Js).Value!.Build())
+        var component = maybeIndex.Html
+            .AddChild("sliststyles", maybeIndex.Css.Build())
+            .AddChild("slistscript", maybeIndex.Js.Build())
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
 }
 
-public enum ComponentError { MissingHtml, MissingCss, MissingJs }
-public sealed record Component(string Html, string Css, string Js);
+public record PageComponents(ComponentBuilder Html, ComponentBuilder Css, ComponentBuilder Js);
+
 public class ComponentProvider
 {
-    public (Component?, ComponentError?) GetComponent(string folder)
+    public Result<PageComponents, IOError> GetComponent(string folder)
     {
-        var html = FindFile(folder, "index.html");
-        if (html is null) return (null, ComponentError.MissingHtml);
-        var css = FindFile(folder, "styles.css");
-        if (css is null) return (null, ComponentError.MissingCss);
-        var js = FindFile(folder, "script.js");
-        if (js is null) return (null, ComponentError.MissingJs);
-        return (new(html, css, js), null);
+        var html = ComponentBuilder.FromHtmlFile(Path.Join(folder, "index.html"));
+        if (html.IsError) return Result<PageComponents, IOError>.Fail(html.Error!.Value);
+        var css = ComponentBuilder.FromCssFile(Path.Join(folder, "styles.css"));
+        if (css.IsError) return Result<PageComponents, IOError>.Fail(css.Error!.Value);
+        var js = ComponentBuilder.FromJsFile(Path.Join(folder, "script.js"));
+        if (js.IsError) return Result<PageComponents, IOError>.Fail(js.Error!.Value);
+        return Result<PageComponents, IOError>.Ok(new(html.Value!, css.Value!, js.Value!));
     }
 
     public string? FindFile(string folder, string name)
