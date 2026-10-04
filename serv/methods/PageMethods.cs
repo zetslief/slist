@@ -11,11 +11,10 @@ public static class PageMethods
         var (maybeIndex, maybeError) = componentProvider.GetComponent(folder);
         if (maybeError.HasValue) return Results.InternalServerError();
         Debug.Assert(maybeIndex is not null);
-        var component = new HtmlT.Component(File.ReadAllText(maybeIndex.Html), new Dictionary<string, HtmlT.Component>()
-        {
-            { "sliststyles", new HtmlT.Component(File.ReadAllText(maybeIndex.Css), []) },
-            { "slistscript", new HtmlT.Component(File.ReadAllText(maybeIndex.Js), []) },
-        });
+        var component = ComponentBuilder.FromHtmlFile(maybeIndex.Html).Value!
+            .AddChild("sliststyles", ComponentBuilder.FromCssFile(maybeIndex.Css).Value!.Build())
+            .AddChild("slistscript", ComponentBuilder.FromJsFile(maybeIndex.Js).Value!.Build())
+            .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
 }
