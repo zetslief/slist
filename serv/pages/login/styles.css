@@ -35,3 +35,32 @@
       }
     }
 }
+
+.register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > .register-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--gap);
+      border: var(--default-border);
+      width: min-content;
+      padding: var(--padding);
+
+      > .register-fields {
+          display: grid;
+          grid-template-columns: min-content 1fr;
+          gap: var(--gap);
+      }
+
+      > .label {
+      }
+
+      > .button {
+        width: 100%;
+      }
+    }
+}
