@@ -6,7 +6,8 @@
   <body>
     <div class="header">
       <h1>Hello, Slist!</h1>
-      <button class="add-new-button">➕New list</button>
+      <button class="add-new-button"
+        commandfor="new-list-dialog" command="show-modal">➕New list</button>
     </div>
     <div class="list-container">
       <div class="list-item">
@@ -41,6 +42,13 @@
         </div>
       </div>
     </div>
+
+    <dialog id="new-list-dialog">
+      <div>
+        <h1>Hello!</h1>
+        <button commandfor="new-list-dialog" command="close">Close</button>
+      </div>
+    </dialog>
     <slistscript />
   </body>
 </html>
