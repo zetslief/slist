@@ -1,13 +1,16 @@
 <html>
   <head>
+    <meta charset="utf-8" />
     <sliststyles />
   </head>
   <body>
-    <h1>Hello, Slist!</h1>
-    <div>
-
-      <div>
-        <h3>Groceries</h3>
+    <div class="header">
+      <h1>Hello, Slist!</h1>
+      <button class="add-new-button">➕New list</button>
+    </div>
+    <div class="list-container">
+      <div class="list-item">
+        <h3 class="list-title">Groceries</h3>
         <div>
           <input type="checkbox" name="fruits"/>
           <label for="fruits">Fruits</label>
@@ -22,8 +25,8 @@
         </div>
       </div>
 
-      <div>
-        <h3>Car</h3>
+      <div class="list-item">
+        <h3 class="list-title">Car</h3>
         <div>
           <input type="checkbox" name="tires"/>
           <label for="tires">Tires</label>
@@ -37,9 +40,7 @@
           <label for="breaks">Breaks</label>
         </div>
       </div>
-
     </div>
-
     <slistscript />
   </body>
 </html>

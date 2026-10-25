@@ -1,3 +1,32 @@
-h3 {
-  background-color: red;
+:root {
+  --gap: 1em;
+  --padding: 0.5em;
+  --margin: 0.1em;
+
+  --list-item-border: thin solid black;
+}
+
+.header {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+
+  > .add-new-button {
+    background-color: transparent;
+  }
+}
+
+.list-container {
+  display: flex;
+  background-color: green;
+  gap: var(--gap);
+}
+
+.list-item {
+  border: var(--list-item-border);
+  padding: var(--padding);
+
+  > .list-title {
+    margin: var(--margin);
+  }
 }
