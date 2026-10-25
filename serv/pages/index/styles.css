@@ -3,6 +3,9 @@
   --padding: 0.5em;
   --margin: 0.1em;
 
+  --default-button-color: transparent;
+  --default-border: thin solid black;
+
   --list-item-border: thin solid black;
 }
 
@@ -12,13 +15,12 @@
   align-items: center;
 
   > .add-new-button {
-    background-color: transparent;
+    background-color: var(--default-button-color);
   }
 }
 
 .list-container {
   display: flex;
-  background-color: green;
   gap: var(--gap);
 }
 
@@ -28,5 +30,25 @@
 
   > .list-title {
     margin: var(--margin);
+  }
+}
+
+.new-list-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+
+  > .title {
+    margin: var(--margin);
+  }
+
+  > .button-bar {
+    > .submit {
+      background-color: var(--default-button-color);
+    }
+
+    > .cancel {
+      background-color: var(--default-button-color);
+    }
   }
 }

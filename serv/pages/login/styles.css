@@ -1,0 +1,37 @@
+:root {
+  --gap: 1em;
+  --padding: 0.5em;
+  --margin: 0.1em;
+
+  --default-button-color: transparent;
+  --default-border: thin solid black;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > .login-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--gap);
+      border: var(--default-border);
+      width: min-content;
+      padding: var(--padding);
+
+      > .login-fields {
+          display: grid;
+          grid-template-columns: min-content 1fr;
+          gap: var(--gap);
+      }
+
+      > .label {
+      }
+
+      > .button {
+        width: 100%;
+      }
+    }
+}

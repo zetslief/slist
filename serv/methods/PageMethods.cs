@@ -17,6 +17,19 @@ public static class PageMethods
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
+
+    public static IResult GetLoginPage(ComponentProvider componentProvider)
+    {
+        var folder = "./pages/login";
+        var (maybeIndex, maybeError) = componentProvider.GetComponent(folder);
+        if (maybeError.HasValue) return Results.InternalServerError();
+        Debug.Assert(maybeIndex is not null);
+        var component = maybeIndex.Html
+            .AddChild("sliststyles", maybeIndex.Css.Build())
+            .AddChild("slistscript", maybeIndex.Js.Build())
+            .Build();
+        return Results.Content(new HtmlTemplate().Render(component), "text/html");
+    }
 }
 
 public record PageComponents(ComponentBuilder Html, ComponentBuilder Css, ComponentBuilder Js);

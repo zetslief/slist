@@ -13,15 +13,15 @@
       <div class="list-item">
         <h3 class="list-title">Groceries</h3>
         <div>
-          <input type="checkbox" name="fruits"/>
+          <input type="checkbox" id="fruits"/>
           <label for="fruits">Fruits</label>
         </div>
         <div>
-          <input type="checkbox" name="veggies"/>
+          <input type="checkbox" id="veggies"/>
           <label for="veggies">Veggies</label>
         </div>
         <div>
-          <input type="checkbox" name="else"/>
+          <input type="checkbox" id="else"/>
           <label for="else">Else</label>
         </div>
       </div>
@@ -29,26 +29,34 @@
       <div class="list-item">
         <h3 class="list-title">Car</h3>
         <div>
-          <input type="checkbox" name="tires"/>
+          <input type="checkbox" id="tires"/>
           <label for="tires">Tires</label>
         </div>
         <div>
-          <input type="checkbox" name="window"/>
+          <input type="checkbox" id="window"/>
           <label for="window">Window</label>
         </div>
         <div>
-          <input type="checkbox" name="breaks"/>
+          <input type="checkbox" id="breaks"/>
           <label for="breaks">Breaks</label>
         </div>
       </div>
     </div>
 
     <dialog id="new-list-dialog">
-      <div>
-        <h1>Hello!</h1>
-        <button commandfor="new-list-dialog" command="close">Close</button>
+      <div class="new-list-dialog">
+        <h3 class="title">Add new list</h3>
+        <div>
+          <label for="new-list-name">Title:</label>
+          <input id="new-list-name" placeholder="type new list name...." />
+        </div>
+        <div class="button-bar">
+          <button class="submit" commandfor="new-list-dialog" command="close">Save</button>
+          <button class="cancel" commandfor="new-list-dialog" command="close">Cancel</button>
+        </div>
       </div>
     </dialog>
+
     <slistscript />
   </body>
 </html>
