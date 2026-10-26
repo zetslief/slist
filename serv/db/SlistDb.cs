@@ -14,29 +14,32 @@ public sealed class SlistDb(DbContextOptions<SlistDb> options) : DbContext(optio
         modelBuilder.Entity<List>().Property(e => e.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<Item>().Property(e => e.Id).ValueGeneratedOnAdd();
     }
-
 }
 
 public class User
 {
-    public Guid Id { get; }
+    public Guid Id { get; } = Guid.NewGuid();
     public required string Login { get; init; }
     public required string PasswordHash { get; init; }
 }
 
 public class List
 {
-    public Guid Id { get; }
-    public required string Title { get; init; }
+    public Guid Id { get; } = Guid.NewGuid();
+    public required string Title { get; set; }
+    public required DateTime CreatedOn { get; init; } 
+    public required DateTime LastModified { get; set; }
 
     public required User User { get; set; }
 }
 
 public class Item
 {
-    public Guid Id { get; }
-    public required string Name { get; init; }
-    public bool Checked { get; private set; }
+    public Guid Id { get; } = Guid.NewGuid();
+    public required string Name { get; set; }
+    public bool Checked { get; set; }
+    public required DateTime CreatedOn { get; init; } 
+    public required DateTime LastModified { get; set; } 
 
     public required List List { get; init; }
 }

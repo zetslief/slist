@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SlistDb>(o => o.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddSingleton<ComponentProvider>();
 builder.Services.AddAntiforgery();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
@@ -24,6 +23,8 @@ builder.Services.AddAuthorizationBuilder().SetFallbackPolicy(
     new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddSingleton<ComponentProvider>();
 
 var app = builder.Build();
 
@@ -43,5 +44,6 @@ app.MapPost("/register", DataMethods.RegisterAsync).DisableAntiforgery()
     .AllowAnonymous();
 app.MapPost("/login", DataMethods.LoginAsync).DisableAntiforgery()
     .AllowAnonymous();
+app.MapPost("/lists/new", ListDataMethods.CreateAsync);
 
 app.Run();

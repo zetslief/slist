@@ -43,3 +43,17 @@ public static class DataMethods
         }
     }
 }
+
+public static class ListDataMethods
+{
+    public async static Task<IResult> CreateAsync(Dto.NewList newList, ClaimsPrincipal principal, SlistDb db)
+    {
+        var maybeLogin = principal.FindFirstValue("login");
+        if (string.IsNullOrEmpty(maybeLogin)) return Results.Forbid();
+        var maybeUser = await db.Users.FirstOrDefaultAsync(u => u.Login == maybeLogin);
+        if (maybeUser is null) return Results.BadRequest();
+        var newUser = db.Lists.Add(new() { User = maybeUser, Title = newList.Title, CreatedOn = DateTime.UtcNow, LastModified = DateTime.UtcNow });
+        await db.SaveChangesAsync();
+        return Results.Json<Dto.List>(new(newUser.Entity.Id, newUser.Entity.Title, newUser.Entity.LastModified));
+    }
+}

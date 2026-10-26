@@ -11,7 +11,7 @@ using Serv.Db;
 namespace serv.Migrations
 {
     [DbContext(typeof(SlistDb))]
-    [Migration("20261025202232_Initial")]
+    [Migration("20261026224658_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -28,6 +28,12 @@ namespace serv.Migrations
 
                     b.Property<bool>("Checked")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("ListId")
                         .HasColumnType("TEXT");
@@ -47,6 +53,12 @@ namespace serv.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
