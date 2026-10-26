@@ -5,6 +5,7 @@ using Serv.DataMethods;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 {
     o.ExpireTimeSpan = TimeSpan.FromDays(1);
     o.SlidingExpiration = true;
+    o.AccessDeniedPath = "/login";
+    o.LoginPath = "/login";
 });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder().SetFallbackPolicy(
+    new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -27,13 +31,17 @@ app.UseCookiePolicy(new()
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
 });
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGet("/", PageMethods.GetRootPage).WithName("home").DisableAntiforgery();
-app.MapGet("/login", PageMethods.GetLoginPage).WithName("login").DisableAntiforgery();
+app.MapGet("/login", PageMethods.GetLoginPage).WithName("login").DisableAntiforgery()
+    .AllowAnonymous();
 
-app.MapPost("/register", DataMethods.RegisterAsync).DisableAntiforgery();
-app.MapPost("/login", DataMethods.LoginAsync).DisableAntiforgery();
+app.MapPost("/register", DataMethods.RegisterAsync).DisableAntiforgery()
+    .AllowAnonymous();
+app.MapPost("/login", DataMethods.LoginAsync).DisableAntiforgery()
+    .AllowAnonymous();
 
 app.Run();
