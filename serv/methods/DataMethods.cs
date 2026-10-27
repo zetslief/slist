@@ -52,8 +52,24 @@ public static class ListDataMethods
         if (string.IsNullOrEmpty(maybeLogin)) return Results.Forbid();
         var maybeUser = await db.Users.FirstOrDefaultAsync(u => u.Login == maybeLogin);
         if (maybeUser is null) return Results.BadRequest();
-        var newUser = db.Lists.Add(new() { User = maybeUser, Title = newList.Title, CreatedOn = DateTime.UtcNow, LastModified = DateTime.UtcNow });
+        var newListEntity = db.Lists.Add(new() { User = maybeUser, Title = newList.Title, CreatedOn = DateTime.UtcNow, LastModified = DateTime.UtcNow });
         await db.SaveChangesAsync();
-        return Results.Json<Dto.List>(new(newUser.Entity.Id, newUser.Entity.Title, newUser.Entity.LastModified));
+        return Results.Json<Dto.List>(new(newListEntity.Entity.Id, newListEntity.Entity.Title, newListEntity.Entity.LastModified));
+    }
+
+    public async static Task<IResult> AppendItemAsync(Guid listId, Dto.NewItem newItem, SlistDb db)
+    {
+        var maybeList = await db.Lists.FirstOrDefaultAsync(l => l.Id == listId);
+        if (maybeList is null) return Results.BadRequest($"List {listId} not found");
+        var newItemEntity = db.Items.Add(new()
+        {
+            Name = newItem.Name,
+            Checked = false,
+            CreatedOn = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
+            List = maybeList
+        });
+        await db.SaveChangesAsync();
+        return Results.Json<Dto.Item>(new(newItemEntity.Entity.Id, newItemEntity.Entity.Name, newItemEntity.Entity.Checked, newItemEntity.Entity.CreatedOn));
     }
 }
