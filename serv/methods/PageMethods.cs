@@ -23,7 +23,7 @@ public static class PageMethods
         var listsData = await db.Lists.AsNoTracking().ToArrayAsync();
         var slists = listsData.Select(list => componentProvider.GetComponent("./pages/slist").Value!.Html
             .AddChild("sliststyles", maybeSlist.Css.Build())
-            .AddChild("slistscirpt", maybeSlist.Js.Build())
+            .AddChild("slistscript", maybeSlist.Js.Build())
             .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
             .Build()).ToImmutableArray();
         var component = maybeIndex.Html

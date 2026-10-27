@@ -4,6 +4,8 @@ Simple lists
 
 ## TODO:
 
+-HtmlT:
+  - Figure out how to write data into tempaltes. Currently, to create a new list item, fetch needs to know list id.
 - Items:
     - Delete item.
 - Lists
