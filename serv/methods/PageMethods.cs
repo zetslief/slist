@@ -16,11 +16,11 @@ public static class PageMethods
         var (maybeIndex, maybeError) = componentProvider.GetComponent(folder);
         if (maybeError.HasValue) return Results.InternalServerError();
         Debug.Assert(maybeIndex is not null);
+        // TODO: fix this mess. better API is needed. either reuse the builer or use a builder factory (lol) or have a better idea.
         (var maybeSlist, maybeError) = componentProvider.GetComponent("./pages/slist"); 
         if (maybeError.HasValue) return Results.InternalServerError();
         Debug.Assert(maybeSlist is not null);
         var listsData = await db.Lists.AsNoTracking().ToArrayAsync();
-        // TODO: fix this mess. better API is needed. either reuse the builer or use a builder factory (lol) or have a better idea.
         var slists = listsData.Select(list => componentProvider.GetComponent("./pages/slist").Value!.Html
             .AddChild("sliststyles", maybeSlist.Css.Build())
             .AddChild("slistscirpt", maybeSlist.Js.Build())
