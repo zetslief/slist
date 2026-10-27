@@ -2,7 +2,7 @@ const newListNameInput = document.getElementById("new-list-name");
 const getNewListName = () => newListNameInput.value;
 
 async function createList() {
-  const newListName = getNewListName();
+  const title = getNewListName();
   var response = await fetch("/lists/new", {
     method: 'POST',
     headers: { 'Content-Type' : 'application/json' },
