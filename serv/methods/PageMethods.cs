@@ -15,14 +15,19 @@ public static class PageMethods
         var folder = "./pages/index";
         var indexComponents = componentProvider.GetComponent(folder);
         var slistComponents = componentProvider.GetComponent("./pages/slist");
-        var listsData = await db.Lists.AsNoTracking().ToArrayAsync();
-        var slists = listsData.Select(list => ComponentBuilder.FromHtml(slistComponents.Html)
-            .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
-            .AddData("SLIST_ID", list.Id.ToString())
+        var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
+        var listsData = await db.Items.Include(i => i.List).ToArrayAsync();
+        var slists = listsData.GroupBy(i => i.List).Select(list => ComponentBuilder.FromHtml(slistComponents.Html)
+            .AddChild("slisttitle", ComponentBuilder.Text(list.Key.Title))
+            .AddChild("slistitems", ComponentBuilder.List(list.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
+                .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
+                .AddData("slist-item-id", item.Id.ToString())
+                .Build())))
+            .AddData("slist-id", list.Key.Id.ToString())
             .Build()).ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css + slistComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(indexComponents.Js + slistComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css + slistComponents.Css + slistItemComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(indexComponents.Js + slistComponents.Js + slistItemComponents.Js).Build())
             .AddChild("slistlists", ComponentBuilder.List(slists))
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
