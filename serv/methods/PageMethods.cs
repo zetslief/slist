@@ -16,14 +16,16 @@ public static class PageMethods
         var indexComponents = componentProvider.GetComponent(folder);
         var slistComponents = componentProvider.GetComponent("./pages/slist");
         var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
-        var listsData = await db.Items.Include(i => i.List).ToArrayAsync();
-        var slists = listsData.GroupBy(i => i.List).Select(list => ComponentBuilder.FromHtml(slistComponents.Html)
-            .AddChild("slisttitle", ComponentBuilder.Text(list.Key.Title))
-            .AddChild("slistitems", ComponentBuilder.List(list.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
+        Dictionary<List, List<Item>> data = await db.Lists.ToDictionaryAsync(l => l, l => new List<Item>());
+        var itemsData = await db.Items.Include(i => i.List).ToArrayAsync();
+        foreach (var item in itemsData) data[item.List].Add(item);
+        var slists = data.Select(pair => ComponentBuilder.FromHtml(slistComponents.Html)
+            .AddChild("slisttitle", ComponentBuilder.Text(pair.Key.Title))
+            .AddChild("slistitems", ComponentBuilder.List(pair.Value.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
                 .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
                 .AddData("slist-item-id", item.Id.ToString())
                 .Build())))
-            .AddData("slist-id", list.Key.Id.ToString())
+            .AddData("slist-id", pair.Key.Id.ToString())
             .Build()).ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)
             .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css + slistComponents.Css + slistItemComponents.Css).Build())

@@ -24,15 +24,6 @@
   gap: var(--gap);
 }
 
-.list-item {
-  border: var(--list-item-border);
-  padding: var(--padding);
-
-  > .list-title {
-    margin: var(--margin);
-  }
-}
-
 .new-list-dialog {
   display: flex;
   flex-direction: column;
