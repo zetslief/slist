@@ -1,7 +1,8 @@
 async function addNewItem(button) {
     const input = button.previousElementSibling;
-    const item = newItemDto(input.value);
-    const response = await fetch("/items/new", {
+    const list = button.closest(".list");
+    const item = newItemDto(list.id, input.value);
+    const response = await fetch(`/items/new`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(item),
@@ -13,6 +14,6 @@ async function addNewItem(button) {
     console.log(await response.json());
 }
 
-function newItemDto(content) {
-    return { content: content };
+function newItemDto(listId, content) {
+    return { listId: listId, name: content };
 }

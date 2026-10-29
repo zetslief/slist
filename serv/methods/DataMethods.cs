@@ -57,10 +57,10 @@ public static class ListDataMethods
         return Results.Json<Dto.List>(new(newListEntity.Entity.Id, newListEntity.Entity.Title, newListEntity.Entity.LastModified));
     }
 
-    public async static Task<IResult> AppendItemAsync(Guid listId, Dto.NewItem newItem, SlistDb db)
+    public async static Task<IResult> AppendItemAsync(Dto.NewItem newItem, SlistDb db)
     {
-        var maybeList = await db.Lists.FirstOrDefaultAsync(l => l.Id == listId);
-        if (maybeList is null) return Results.BadRequest($"List {listId} not found");
+        var maybeList = await db.Lists.FirstOrDefaultAsync(l => l.Id == newItem.ListId);
+        if (maybeList is null) return Results.BadRequest($"List {newItem.ListId} not found");
         var newItemEntity = db.Items.Add(new()
         {
             Name = newItem.Name,

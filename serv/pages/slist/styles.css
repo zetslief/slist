@@ -1,0 +1,8 @@
+.list {
+  border: var(--default-border);
+  padding: var(--padding);
+
+  > .list-title {
+    margin: var(--margin);
+  }
+}

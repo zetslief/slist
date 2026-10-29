@@ -5,6 +5,8 @@ Simple lists
 ## TODO:
 
 -HtmlT:
+- NEXT:
+  - How to combine element styles & scripts?
 - Items:
     - Delete item.
 - Lists

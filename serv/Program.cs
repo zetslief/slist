@@ -45,6 +45,6 @@ app.MapPost("/register", DataMethods.RegisterAsync).DisableAntiforgery()
 app.MapPost("/login", DataMethods.LoginAsync).DisableAntiforgery()
     .AllowAnonymous();
 app.MapPost("/lists/new", ListDataMethods.CreateAsync);
-app.MapPost("/lists/{listId}/new", ListDataMethods.AppendItemAsync);
+app.MapPost("/items/new", ListDataMethods.AppendItemAsync);
 
 app.Run();
