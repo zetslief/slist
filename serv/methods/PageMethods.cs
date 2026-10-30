@@ -24,6 +24,7 @@ public static class PageMethods
             .AddChild("slistitems", ComponentBuilder.List(pair.Value.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
                 .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
                 .AddData("slist-item-id", item.Id.ToString())
+                .AddData("checkedvalue", item.Checked ? "checked" : string.Empty)
                 .Build())))
             .AddChild("slistitemtemplate", ComponentBuilder.FromHtml(slistItemComponents.Html)
                 .AddChild("slistitemlabel", ComponentBuilder.Text("ITEM_TEMPLATE"))

@@ -72,4 +72,14 @@ public static class ListDataMethods
         await db.SaveChangesAsync();
         return Results.Json<Dto.Item>(new(newItemEntity.Entity.Id, newItemEntity.Entity.Name, newItemEntity.Entity.Checked, newItemEntity.Entity.CreatedOn));
     }
+
+    public async static Task<IResult> ToggleItemAsync(Guid itemId, SlistDb db)
+    {
+        var item = await db.Items.FirstOrDefaultAsync(i => i.Id == itemId);
+        if (item is null) return Results.BadRequest($"Failed to find item '{itemId}'");
+        item.Checked = !item.Checked;
+        item.LastModified = DateTime.UtcNow;
+        await db.SaveChangesAsync();
+        return Results.Json<Dto.Item>(new(item.Id, item.Name, item.Checked, item.CreatedOn));
+    }
 }
