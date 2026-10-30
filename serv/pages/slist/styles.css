@@ -2,7 +2,21 @@
   border: var(--default-border);
   padding: var(--padding);
 
-  > .list-title {
+  > .header {
     margin: var(--margin);
+
+    > .copy-button {
+      background-color: var(--default-button-color);
+      border: none;
+
+      &:hover {
+        background-color: lightskyblue;
+        outline: thin solid lightgrey;
+      }
+
+      &:active {
+        background-color: lightgreen;
+      }
+    }
   }
 }

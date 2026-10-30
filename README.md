@@ -6,8 +6,11 @@ Simple lists
 
 -HtmlT:
 
+- NEXT:
+  - Copy as text.
+  - Share links. 
+
 - Items:
-  + Click the item.
   - Delete the item.
   - Rename the item.
 - Lists
