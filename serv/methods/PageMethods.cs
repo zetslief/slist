@@ -25,6 +25,9 @@ public static class PageMethods
                 .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
                 .AddData("slist-item-id", item.Id.ToString())
                 .Build())))
+            .AddChild("slistitemtemplate", ComponentBuilder.FromHtml(slistItemComponents.Html)
+                .AddChild("slistitemlabel", ComponentBuilder.Text("ITEM_TEMPLATE"))
+                .Build())
             .AddData("slist-id", pair.Key.Id.ToString())
             .Build()).ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)

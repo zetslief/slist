@@ -1,3 +1,5 @@
+const itemTemplate = document.getElementById("list-item-template");
+
 async function addNewItem(button) {
     const input = button.previousElementSibling;
     const list = button.closest(".list");
@@ -11,7 +13,21 @@ async function addNewItem(button) {
         console.error(response);
         return;
     }
-    console.log(await response.json());
+    const createdItem = await response.json();
+    const listItems = list.querySelector(".list-items");
+    const newNode = createItemNode(createdItem);
+    listItems.appendChild(newNode);
+    input.value = "";
+}
+
+function createItemNode(item) {
+    const itemFragment = itemTemplate.content.cloneNode(true);
+    const input = itemFragment.querySelector("input");
+    const label = itemFragment.querySelector("label");
+    input.id = item.id;
+    label.htmlFor = item.id;
+    label.textContent = item.name;
+    return itemFragment;
 }
 
 function newItemDto(listId, content) {

@@ -1,8 +1,14 @@
 <div class="list" id="slist-id">
     <h3 class="list-title"><slisttitle /></h3>
-    <slistitems />
+    <div class="list-items">
+        <slistitems />
+    </div>
     <div>
-        <input class="-new-item-marker" type="text" placeholder="add new item..." />
+        <input class="-new-item-marker" name="new-item-input" type="text" placeholder="add new item..." />
         <button onclick="addNewItem(this)">Add</button>
     </div>
+
+    <template id="list-item-template">
+        <slistitemtemplate />
+    </template>
 </div>

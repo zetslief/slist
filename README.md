@@ -6,13 +6,15 @@ Simple lists
 
 -HtmlT:
 - NEXT:
-  - How to combine element styles & scripts?
+  - Update page when new items/lists are added. Tempaltes?
+
 - Items:
-    - Delete item.
+  - Delete item.
+  - Click the item.
 - Lists
-    - Show progress bar.
-    - Rename list.
-    - Each list should have `add item` button.
+  - Show progress bar.
+  - Rename list.
+  - Each list should have `add item` button.
 - Login
   - Add login error message when login fails.
   - Do validation
