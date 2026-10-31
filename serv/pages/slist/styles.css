@@ -1,9 +1,18 @@
 .list {
+  display: flex;
+  flex-direction: column;
+
   border: var(--default-border);
   padding: var(--padding);
+  gap: var(--small-gap);
 
   > .header {
+    display: flex;
     margin: var(--margin);
+
+    > .title {
+      margin: 0;
+    }
 
     > .copy-button {
       background-color: var(--default-button-color);
@@ -18,5 +27,9 @@
         background-color: lightgreen;
       }
     }
+  }
+
+  > .footer {
+    margin-top: auto;
   }
 }
