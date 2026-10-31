@@ -52,16 +52,18 @@ public static class PageMethods
 
     public static IResult GetListPageAsync(Guid listId, ComponentProvider componentProvider)
     {
+        var shared = componentProvider.GetSharedComponent();
         var listComponents = componentProvider.GetComponent("./pages/list");
         var component = ComponentBuilder.FromHtml(listComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(listComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(listComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css + listComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js + listComponents.Js).Build())
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
 }
 
 public record PageComponents(string Html, string Css, string Js);
+public record SharedComponents(string Css, string Js);
 
 public class ComponentProvider
 {
@@ -72,6 +74,9 @@ public class ComponentProvider
         var js = File.ReadAllText(Path.Join(folder, "script.js"));
         return new(html, css, js);
     }
+
+    public SharedComponents GetSharedComponent()
+        => new(File.ReadAllText("./shared/styles.css"), File.ReadAllText("./sahred/scripts.js"));
 
     public string? FindFile(string folder, string name)
     {
