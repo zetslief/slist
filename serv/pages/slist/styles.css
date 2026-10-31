@@ -15,19 +15,6 @@
     > .title {
       margin: 0;
     }
-
-    > .copy-button {
-      background-color: var(--default-button-color);
-      border: none;
-
-      &:hover {
-        outline: thin dashed lightgrey;
-      }
-
-      &:active {
-        outline: thin dashed lightgreen;
-      }
-    }
   }
 
   > .footer {

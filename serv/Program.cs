@@ -39,6 +39,7 @@ app.UseAuthorization();
 app.MapGet("/", PageMethods.GetRootPage).WithName("home").DisableAntiforgery();
 app.MapGet("/login", PageMethods.GetLoginPage).WithName("login").DisableAntiforgery()
     .AllowAnonymous();
+app.MapGet("/lists/{listId}", PageMethods.GetListPageAsync).WithName("list").DisableAntiforgery();
 
 app.MapPost("/register", DataMethods.RegisterAsync).DisableAntiforgery()
     .AllowAnonymous();

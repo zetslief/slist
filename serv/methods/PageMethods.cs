@@ -49,6 +49,16 @@ public static class PageMethods
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
+
+    public static IResult GetListPageAsync(Guid listId, ComponentProvider componentProvider)
+    {
+        var listComponents = componentProvider.GetComponent("./pages/list");
+        var component = ComponentBuilder.FromHtml(listComponents.Html)
+            .AddChild("sliststyles", ComponentBuilder.FromCss(listComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(listComponents.Js).Build())
+            .Build();
+        return Results.Content(new HtmlTemplate().Render(component), "text/html");
+    }
 }
 
 public record PageComponents(string Html, string Css, string Js);

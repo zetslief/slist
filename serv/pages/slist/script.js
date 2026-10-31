@@ -44,6 +44,13 @@ async function copyListToClipboard(button) {
     await navigator.clipboard.writeText(result);
 }
 
+async function shareListToClipboard(button) {
+    const list = button.closest(".list");
+    const link = `${location.href}lists/${list.id}`;
+    console.log(link);
+    await navigator.clipboard.writeText(link);
+}
+
 function newItemDto(listId, content) {
     return { listId: listId, name: content };
 }

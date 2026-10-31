@@ -7,7 +7,6 @@ Simple lists
 -HtmlT:
 
 - NEXT:
-  - Copy as text.
   - Share links. 
 
 - Items:
