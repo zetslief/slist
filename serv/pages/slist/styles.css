@@ -8,6 +8,8 @@
 
   > .header {
     display: flex;
+
+    gap: var(--small-gap);
     margin: var(--margin);
 
     > .title {
@@ -19,12 +21,11 @@
       border: none;
 
       &:hover {
-        background-color: lightskyblue;
-        outline: thin solid lightgrey;
+        outline: thin dashed lightgrey;
       }
 
       &:active {
-        background-color: lightgreen;
+        outline: thin dashed lightgreen;
       }
     }
   }

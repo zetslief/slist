@@ -30,6 +30,20 @@ function createItemNode(item) {
     return itemFragment;
 }
 
+async function copyListToClipboard(button) {
+    const list = button.closest(".list");
+    const title = list.querySelector(".-title-marker");
+    const items = list.querySelectorAll(".list-item");
+    let result = `# ${title.textContent}:`
+    for (const item of items) {
+        const input = item.querySelector(".-list-item-value-marker"); 
+        const label = item.querySelector(".-list-item-title-marker"); 
+        result += `\n- [${(input.checked ? 'x' : ' ')}] ${label.textContent}`;
+    }
+    console.log(result);
+    await navigator.clipboard.writeText(result);
+}
+
 function newItemDto(listId, content) {
     return { listId: listId, name: content };
 }
