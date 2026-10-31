@@ -50,13 +50,26 @@ public static class PageMethods
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
 
-    public static IResult GetListPageAsync(Guid listId, ComponentProvider componentProvider)
+    public static async Task<IResult> GetListPageAsync(Guid listId, SlistDb db, ComponentProvider componentProvider)
     {
+        var list = await db.Lists.FirstOrDefaultAsync(l => l.Id == listId);
+        if (list is null) return Results.BadRequest($"List '{listId} not found.");
+        var items = await db.Items.Include(i => i.List).Where(i => i.List.Id == listId).ToArrayAsync();
         var shared = componentProvider.GetSharedComponent();
         var listComponents = componentProvider.GetComponent("./pages/list");
+        var slistComponents = componentProvider.GetComponent("./pages/slist");
+        var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
         var component = ComponentBuilder.FromHtml(listComponents.Html)
             .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css, listComponents.Css).Build())
             .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js, listComponents.Js).Build())
+            .AddChild("slist", ComponentBuilder.FromHtml(slistComponents.Html)
+                .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
+                .AddChild("slistitems", ComponentBuilder.List(items.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
+                    .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
+                    .AddData("slist-item-id", item.Id.ToString())
+                    .AddData("checkedvalue", item.Checked ? "checked" : string.Empty)
+                    .Build())))
+                .Build())
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
