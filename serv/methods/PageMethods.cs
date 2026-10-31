@@ -32,8 +32,8 @@ public static class PageMethods
             .AddData("slist-id", pair.Key.Id.ToString())
             .Build()).ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css + slistComponents.Css + slistItemComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(indexComponents.Js + slistComponents.Js + slistItemComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(indexComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
             .AddChild("slistlists", ComponentBuilder.List(slists))
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
@@ -55,8 +55,8 @@ public static class PageMethods
         var shared = componentProvider.GetSharedComponent();
         var listComponents = componentProvider.GetComponent("./pages/list");
         var component = ComponentBuilder.FromHtml(listComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css + listComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js + listComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css, listComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js, listComponents.Js).Build())
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
@@ -76,7 +76,7 @@ public class ComponentProvider
     }
 
     public SharedComponents GetSharedComponent()
-        => new(File.ReadAllText("./shared/styles.css"), File.ReadAllText("./sahred/scripts.js"));
+        => new(File.ReadAllText("./pages/shared/styles.css"), File.ReadAllText("./pages/shared/script.js"));
 
     public string? FindFile(string folder, string name)
     {
