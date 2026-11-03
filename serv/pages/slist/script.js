@@ -1,8 +1,10 @@
 const itemTemplate = document.getElementById("list-item-template");
 
-async function addNewItem(button) {
-    const input = button.previousElementSibling;
-    const list = button.closest(".list");
+async function addNewItem(event) {
+    event.preventDefault();
+    const form = event.target;
+    const list = form.closest(".list");
+    const input = form.querySelector(".-new-item-marker");
     const item = newItemDto(list.id, input.value);
     const response = await fetch(`/items/new`, {
         method: 'POST',
@@ -18,6 +20,7 @@ async function addNewItem(button) {
     const newNode = createItemNode(createdItem);
     listItems.appendChild(newNode);
     input.value = "";
+    input.focus();
 }
 
 function createItemNode(item) {

@@ -6,15 +6,15 @@ Simple lists
 
 -HtmlT:
 
-- NEXT:
-  - Share links. 
-
 - Items:
   - Delete the item.
   - Rename the item.
 - Lists
   - Show progress bar.
   - Rename list.
+  - Select/deselect all.
+- Shared List
+  - Fix header layout.
 - Login
   - Add login error message when login fails.
   - Do validation

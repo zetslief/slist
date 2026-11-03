@@ -9,10 +9,10 @@
     <div class="list-items">
         <slistitems />
     </div>
-    <div class="footer">
-        <input class="-new-item-marker" name="new-item-input" type="text" placeholder="add new item..." />
-        <button onclick="addNewItem(this)">Add</button>
-    </div>
+    <form class="footer" onsubmit="addNewItem(event)">
+        <input class="-new-item-marker" name="new-item-input" type="text" placeholder="add new item..." minlength="1" required />
+        <button type="submit">Add</button>
+    </form>
 
     <template id="list-item-template">
         <slistitemtemplate />
