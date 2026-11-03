@@ -48,5 +48,6 @@ app.MapPost("/login", DataMethods.LoginAsync).DisableAntiforgery()
 app.MapPost("/lists/new", ListDataMethods.CreateAsync);
 app.MapPost("/items/new", ListDataMethods.AppendItemAsync);
 app.MapPost("/items/{itemId}/toggle", ListDataMethods.ToggleItemAsync);
+app.MapDelete("/items/{itemId}", ListDataMethods.DeleteItemAsync);
 
 app.Run();

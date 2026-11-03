@@ -82,4 +82,15 @@ public static class ListDataMethods
         await db.SaveChangesAsync();
         return Results.Json<Dto.Item>(new(item.Id, item.Name, item.Checked, item.CreatedOn));
     }
+
+    public async static Task<IResult> DeleteItemAsync(Guid itemId, SlistDb db)
+    {
+        var deleted = await db.Items.Where(i => i.Id == itemId).ExecuteDeleteAsync();
+        return deleted switch
+        {
+            0 => Results.NotFound(),
+            1 => Results.Json<Dto.DeletedItem>(new(itemId)),
+            _ => Results.InternalServerError($"Deleted {deleted} item while trying to delete `{itemId}`"),
+        };
+    }
 }
