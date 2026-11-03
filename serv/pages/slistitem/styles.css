@@ -1,0 +1,16 @@
+.list-item {
+    display: flex;
+    gap: var(--small-gap);
+    align-items: center;
+
+    > .actions {
+        visibility: hidden;
+    }
+
+    &:hover > .actions {
+        visibility: visible;
+
+        display: flex;
+        gap: var(--small-gap);
+    }
+}

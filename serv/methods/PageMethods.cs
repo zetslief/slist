@@ -13,6 +13,7 @@ public static class PageMethods
     public static async Task<IResult> GetRootPage(SlistDb db, ComponentProvider componentProvider)
     {
         var folder = "./pages/index";
+        var sharedComponenets = componentProvider.GetSharedComponent();
         var indexComponents = componentProvider.GetComponent(folder);
         var slistComponents = componentProvider.GetComponent("./pages/slist");
         var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
@@ -32,8 +33,8 @@ public static class PageMethods
             .AddData("slist-id", pair.Key.Id.ToString())
             .Build()).ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(indexComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(indexComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(sharedComponenets.Css, indexComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(sharedComponenets.Js, indexComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
             .AddChild("slistlists", ComponentBuilder.List(slists))
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");

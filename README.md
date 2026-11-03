@@ -17,10 +17,14 @@ Simple lists
   - Fix header layout.
 - Login
   - Add login error message when login fails.
-  - Do validation
+  - Do validation.
 - Register
   - Add separate registration page.
-  - Do validation
-- Review auth
-    - cookie options
-    - auth options
+  - Do validation.
+
+- Server:
+  - Check all methods. They are supposed to check user ;)
+  - Enable Autoforgery.
+  - Review auth
+      - Cookie options.
+      - Auth options.

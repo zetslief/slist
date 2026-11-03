@@ -1,0 +1,11 @@
+:root {
+  --small-gap: 0.5em;
+  --gap: 1em;
+  --padding: 0.5em;
+  --margin: 0.1em;
+
+  --default-button-color: transparent;
+  --default-border: thin solid black;
+
+  --list-item-border: thin solid black;
+}
