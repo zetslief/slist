@@ -1,8 +1,16 @@
 <div class="list-item">
-    <input type="checkbox" class="-list-item-value-marker" id="slist-item-id" onclick="toggleItem(this)" checkedvalue/>
-    <label for="slist-item-id" class="-list-item-title-marker"><slistitemlabel /></label>
+    <div class="readonly-header">
+        <input type="checkbox" class="-list-item-value-marker" id="slist-item-id" onclick="toggleItem(this)" checkedvalue/>
+        <label for="slist-item-id" class="-list-item-title-marker"><slistitemlabel /></label>
+    </div>
+    <div class="edit-header">
+        <input class="-list-item-rename-value-marker" type="text" minlength="1" required />
+        <button>✅</button>
+        <button>❌</button>
+    </div>
     <div class="actions">
         <button class="action" onclick="copyItem(this)">️📋</button>
+        <button class="action" onclick="renameItem(this)">️✏️</button>
         <button class="action" onclick="deleteItem(this)">🗑️</button>
     </div>
 </div>

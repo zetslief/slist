@@ -32,3 +32,11 @@ async function copyItem(button) {
     console.log(`Copy: '${label.textContent}'`);
     await navigator.clipboard.writeText(label.textContent);
 }
+
+async function renameItem(button) { 
+    const item = button.closest(".list-item");
+    item.classList.add("-edit");
+    const label = item.querySelector(".-list-item-title-marker");
+    const renameInput = item.querySelector(".-list-item-rename-value-marker");
+    renameInput.value = label.textContent;
+}

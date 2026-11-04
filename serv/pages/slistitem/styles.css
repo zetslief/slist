@@ -3,11 +3,34 @@
     gap: var(--small-gap);
     align-items: center;
 
+    > .readonly-header {
+        display: flex;
+        gap: var(--small-gap);
+        align-items: center;
+    }
+
+    > .edit-header {
+        display: none;
+        gap: var(--small-gap);
+        align-items: center;
+    }
+
+    &.-edit {
+        background-color: red;
+        > .readonly-header {
+            display: none;
+        }
+
+        > .edit-header {
+            display: flex;
+        }
+    }
+
     > .actions {
         visibility: hidden;
     }
 
-    &:hover > .actions {
+    &:not(.-edit):hover > .actions {
         visibility: visible;
 
         display: flex;
