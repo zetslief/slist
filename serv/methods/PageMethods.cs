@@ -61,8 +61,8 @@ public static class PageMethods
         var slistComponents = componentProvider.GetComponent("./pages/slist");
         var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
         var component = ComponentBuilder.FromHtml(listComponents.Html)
-            .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css, listComponents.Css).Build())
-            .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js, listComponents.Js).Build())
+            .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css, listComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
+            .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js, listComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
             .AddChild("slist", ComponentBuilder.FromHtml(slistComponents.Html)
                 .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
                 .AddChild("slistitems", ComponentBuilder.List(items.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)

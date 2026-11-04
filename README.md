@@ -4,17 +4,16 @@ Simple lists
 
 ## TODO:
 
--HtmlT:
-
-- Items:
-  - Delete the item.
-  - Rename the item.
+- Item:
+  - Rename.
 - Lists
   - Show progress bar.
-  - Rename list.
+  - Rename.
   - Select/deselect all.
+  - Item change order.
 - Shared List
-  - Fix header layout.
+  - Add header.
+  - Add navigation to home.
 - Login
   - Add login error message when login fails.
   - Do validation.
