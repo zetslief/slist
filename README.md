@@ -6,7 +6,6 @@ Simple lists
 
 - Item:
   - Rename.
-    - Accept.
     - Cancel.
 - Lists
   - Show progress bar.

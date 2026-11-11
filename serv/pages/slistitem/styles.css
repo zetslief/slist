@@ -3,37 +3,42 @@
     gap: var(--small-gap);
     align-items: center;
 
-    > .readonly-header {
-        display: flex;
-        gap: var(--small-gap);
-        align-items: center;
-    }
+    &:not(.-edit) {
+        > .readonly-label {
+            display: flex;
+            gap: var(--small-gap);
+            align-items: center;
 
-    > .edit-header {
-        display: none;
-        gap: var(--small-gap);
-        align-items: center;
+            > .actions {
+                display: flex;
+                gap: var(--small-gap);
+                visibility: hidden;
+            }
+        }
+
+        &:hover > .readonly-label > .actions {
+            visibility: visible;
+        }
+
+        > .edit-label {
+            display: none;
+        }
     }
 
     &.-edit {
-        background-color: red;
-        > .readonly-header {
+        > .readonly-label {
             display: none;
         }
 
-        > .edit-header {
+        > .edit-label {
             display: flex;
+            gap: var(--small-gap);
+            align-items: center;
+
+            > input {
+                min-width: 0;
+                width: 100px;
+            }
         }
-    }
-
-    > .actions {
-        visibility: hidden;
-    }
-
-    &:not(.-edit):hover > .actions {
-        visibility: visible;
-
-        display: flex;
-        gap: var(--small-gap);
     }
 }

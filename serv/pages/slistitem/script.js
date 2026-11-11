@@ -33,10 +33,23 @@ async function copyItem(button) {
     await navigator.clipboard.writeText(label.textContent);
 }
 
-async function renameItem(button) { 
-    const item = button.closest(".list-item");
-    item.classList.add("-edit");
+function getItemLabelAndRenameInput(item) {
     const label = item.querySelector(".-list-item-title-marker");
     const renameInput = item.querySelector(".-list-item-rename-value-marker");
+    return { label, renameInput };
+}
+
+function startRenameItem(button) { 
+    const item = button.closest(".list-item");
+    const { label, renameInput } = getItemLabelAndRenameInput(item);
     renameInput.value = label.textContent;
+    item.classList.add("-edit");
+    renameInput.focus();
+}
+
+function acceptRenameItem(button) {
+    const item = button.closest(".list-item");
+    const { label, renameInput } = getItemLabelAndRenameInput(item);
+    label.textContent = renameInput.value;
+    item.classList.remove("-edit");
 }
