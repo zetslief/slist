@@ -6,11 +6,14 @@ Simple lists
 
 - Item:
   - Rename.
+    - Accept.
+    - Cancel.
 - Lists
   - Show progress bar.
   - Rename.
   - Select/deselect all.
   - Item change order.
+  - Clone list.
 - Shared List
   - Add header.
   - Add navigation to home.
