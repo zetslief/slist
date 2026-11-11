@@ -6,7 +6,8 @@ Simple lists
 
 - Item:
   - Rename.
-    - Cancel.
+    - Cancel: FE.
+    - Accept: do API request.
 - Lists
   - Show progress bar.
   - Rename.

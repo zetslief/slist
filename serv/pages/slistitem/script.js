@@ -53,3 +53,8 @@ function acceptRenameItem(button) {
     label.textContent = renameInput.value;
     item.classList.remove("-edit");
 }
+
+function cancelRenameItem(button) {
+    const item = button.closest(".list-item");
+    item.classList.remove("-edit");
+}
