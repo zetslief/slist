@@ -83,6 +83,16 @@ public static class ListDataMethods
         return Results.Json<Dto.Item>(new(item.Id, item.Name, item.Checked, item.CreatedOn));
     }
 
+    public async static Task<IResult> UpdateItemAsync(Guid itemId, Dto.ItemUpdate update, SlistDb db)
+    {
+        var maybeItem = await db.Items.FirstOrDefaultAsync(i => i.Id == itemId);   
+        if (maybeItem is null) return Results.BadRequest($"Item not found: '{itemId}'");
+        maybeItem.Name = update.Name;
+        maybeItem.LastModified = DateTime.UtcNow;
+        await db.SaveChangesAsync();
+        return Results.Ok();
+    }
+
     public async static Task<IResult> DeleteItemAsync(Guid itemId, SlistDb db)
     {
         var deleted = await db.Items.Where(i => i.Id == itemId).ExecuteDeleteAsync();

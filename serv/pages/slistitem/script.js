@@ -47,10 +47,21 @@ function startRenameItem(button) {
     renameInput.focus();
 }
 
-function acceptRenameItem(button) {
+async function acceptRenameItem(button) {
     const item = button.closest(".list-item");
     const { label, renameInput } = getItemLabelAndRenameInput(item);
-    label.textContent = renameInput.value;
+    const input = item.querySelector(".-list-item-value-marker");
+    const newName = renameInput.value;
+    const response = await fetch(`/items/${input.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName }),
+    });
+    if (!response.ok) {
+        console.error(response);
+        return;
+    }
+    label.textContent = newName;
     item.classList.remove("-edit");
 }
 

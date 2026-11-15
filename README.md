@@ -4,10 +4,6 @@ Simple lists
 
 ## TODO:
 
-- Item:
-  - Rename.
-    - Cancel: FE.
-    - Accept: do API request.
 - Lists
   - Show progress bar.
   - Rename.

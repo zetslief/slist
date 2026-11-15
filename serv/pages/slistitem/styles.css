@@ -37,7 +37,7 @@
 
             > input {
                 min-width: 0;
-                width: 100px;
+                width: 100px; /* TODO: make width dynamic */
             }
         }
     }
