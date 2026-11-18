@@ -33,8 +33,25 @@ function createItemNode(item) {
     return itemFragment;
 }
 
-function acceptRenameList(button) {
-    console.error("accept rename list is not implemented yet.")
+async function acceptRenameList(button) {
+    const list = button.closest(".list");
+    const title = list.querySelector(".-title-marker");
+    const input = list.querySelector(".-list-title-input-marker"); 
+    const newTitleValue = input.value;
+    console.log(`accepting renaming of '${title.textContent}' to '${input.value}'. List id: '${list.id}'`)
+    const response = await fetch(`/lists/${list.id}`, {
+        method : "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: newTitleValue }),
+    });
+    if (!response.ok) {
+        console.error(response);
+        return;
+    }
+    title.textContent = newTitleValue;
+    list.classList.remove("-edit");
 }
 
 function rejectRenameList(button) {

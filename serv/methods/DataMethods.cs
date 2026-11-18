@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Serv.Db;
+using Serv.Dto;
 
 namespace Serv.DataMethods;
 
@@ -55,6 +56,16 @@ public static class ListDataMethods
         var newListEntity = db.Lists.Add(new() { User = maybeUser, Title = newList.Title, CreatedOn = DateTime.UtcNow, LastModified = DateTime.UtcNow });
         await db.SaveChangesAsync();
         return Results.Json<Dto.List>(new(newListEntity.Entity.Id, newListEntity.Entity.Title, newListEntity.Entity.LastModified));
+    }
+
+    public async static Task<IResult> RenameListAsync(Guid listId, Dto.ListUpdate listUpdate, SlistDb db)
+    {
+        var list = await db.Lists.FirstOrDefaultAsync(l => l.Id == listId); 
+        if (list is null) return Results.BadRequest($"Cannot find list with id '{listId}'");
+        list.Title = listUpdate.Name;
+        list.LastModified = DateTime.UtcNow;
+        await db.SaveChangesAsync();
+        return Results.Ok();
     }
 
     public async static Task<IResult> AppendItemAsync(Dto.NewItem newItem, SlistDb db)
