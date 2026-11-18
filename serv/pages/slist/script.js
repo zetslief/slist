@@ -33,6 +33,23 @@ function createItemNode(item) {
     return itemFragment;
 }
 
+function acceptRenameList(button) {
+    console.error("accept rename list is not implemented yet.")
+}
+
+function rejectRenameList(button) {
+    const list = button.closest(".list");
+    list.classList.remove("-edit");
+}
+
+function startRenameList(button) {
+    const list = button.closest(".list");
+    const input = list.querySelector(".-list-title-input-marker");
+    const title = list.querySelector(".-title-marker");
+    input.value = title.textContent;
+    list.classList.add("-edit");
+}
+
 async function copyListToClipboard(button) {
     const list = button.closest(".list");
     const title = list.querySelector(".-title-marker");

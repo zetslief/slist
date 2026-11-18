@@ -5,8 +5,10 @@ Simple lists
 ## TODO:
 
 - Lists
-  - Show progress bar.
   - Rename.
+    - Reject
+    - Accept
+  - Show progress bar.
   - Select/deselect all.
   - Item change order.
   - Clone list.
@@ -26,3 +28,4 @@ Simple lists
   - Review auth
       - Cookie options.
       - Auth options.
+  - Add mapping between DTOs and entities.

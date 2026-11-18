@@ -6,14 +6,37 @@
   padding: var(--padding);
   gap: var(--small-gap);
 
-  > .header {
-    display: flex;
+  &:not(-edit) {
+    > .readonly-header {
+      display: flex;
+      gap: var(--small-gap);
+      margin: var(--margin);
 
-    gap: var(--small-gap);
-    margin: var(--margin);
+      > .title {
+        margin: 0;
+      }
+    }
 
-    > .title {
-      margin: 0;
+    > .edit-header {
+      display: none;
+    }
+  }
+
+  &.-edit {
+    > .readonly-header {
+      display: none;
+    }
+
+    > .edit-header {
+      display: flex;
+
+      gap: var(--small-gap);
+      margin: var(--margin);
+
+      > .input {
+        min-width: 0;
+        max-width: 120px;
+      }
     }
   }
 

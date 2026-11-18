@@ -1,14 +1,24 @@
 <div class="list" id="slist-id">
-    <div class="header">
+    <div class="readonly-header">
         <h3 class="title -title-marker"><slisttitle /></h3>
         <div>
+            <button class="copy-button" onclick="startRenameList(this)">✏️</button>
             <button class="copy-button" onclick="copyListToClipboard(this)">📋</button>
             <button class="copy-button" onclick="shareListToClipboard(this)">🔗</button>
         </div>
     </div>
+    <div class="edit-header">
+        <input class="input -list-title-input-marker" name="list-title-input" />
+        <div>
+            <button class="copy-button" onclick="acceptRenameList(this)">✅</button>
+            <button class="copy-button" onclick="rejectRenameList(this)">❌</button>
+        </div>
+    </div>
+
     <div class="list-items">
         <slistitems />
     </div>
+
     <form class="footer" onsubmit="addNewItem(event)">
         <input class="-new-item-marker" name="new-item-input" type="text" placeholder="add new item..." minlength="1" required />
         <button type="submit">Add</button>
