@@ -5,9 +5,6 @@ Simple lists
 ## TODO:
 
 - Lists
-  - Rename.
-    - Reject
-    - Accept
   - Show progress bar.
   - Select/deselect all.
   - Item change order.

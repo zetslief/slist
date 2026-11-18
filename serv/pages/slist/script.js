@@ -2,9 +2,9 @@ const itemTemplate = document.getElementById("list-item-template");
 
 async function addNewItem(event) {
     event.preventDefault();
-    const form = event.target;
-    const list = form.closest(".list");
-    const input = form.querySelector(".-new-item-marker");
+    const form = assert(event.target);
+    const list = assert(form.closest(".list"));
+    const input = assert(form.querySelector(".-new-item-marker"));
     const item = newItemDto(list.id, input.value);
     const response = await fetch(`/items/new`, {
         method: 'POST',
@@ -15,8 +15,8 @@ async function addNewItem(event) {
         console.error(response);
         return;
     }
-    const createdItem = await response.json();
-    const listItems = list.querySelector(".list-items");
+    const createdItem = assert(await response.json());
+    const listItems = assert(list.querySelector(".list-items"));
     const newNode = createItemNode(createdItem);
     listItems.appendChild(newNode);
     input.value = "";
@@ -25,8 +25,8 @@ async function addNewItem(event) {
 
 function createItemNode(item) {
     const itemFragment = itemTemplate.content.cloneNode(true);
-    const input = itemFragment.querySelector("input");
-    const label = itemFragment.querySelector("label");
+    const input = assert(itemFragment.querySelector("input"));
+    const label = assert(itemFragment.querySelector("label"));
     input.id = item.id;
     label.htmlFor = item.id;
     label.textContent = item.name;
@@ -34,9 +34,9 @@ function createItemNode(item) {
 }
 
 async function acceptRenameList(button) {
-    const list = button.closest(".list");
-    const title = list.querySelector(".-title-marker");
-    const input = list.querySelector(".-list-title-input-marker"); 
+    const list = assert(button.closest(".list"));
+    const title = assert(list.querySelector(".-title-marker"));
+    const input = assert(list.querySelector(".-list-title-input-marker")); 
     const newTitleValue = input.value;
     console.log(`accepting renaming of '${title.textContent}' to '${input.value}'. List id: '${list.id}'`)
     const response = await fetch(`/lists/${list.id}`, {
@@ -55,26 +55,27 @@ async function acceptRenameList(button) {
 }
 
 function rejectRenameList(button) {
-    const list = button.closest(".list");
+    const list = assert(button.closest(".list"));
     list.classList.remove("-edit");
 }
 
 function startRenameList(button) {
-    const list = button.closest(".list");
-    const input = list.querySelector(".-list-title-input-marker");
-    const title = list.querySelector(".-title-marker");
+    const list = assert(button.closest(".list"));
+    const input = assert(list.querySelector(".-list-title-input-marker"));
+    const title = assert(list.querySelector(".-title-marker"));
     input.value = title.textContent;
     list.classList.add("-edit");
+    input.focus();
 }
 
 async function copyListToClipboard(button) {
-    const list = button.closest(".list");
-    const title = list.querySelector(".-title-marker");
+    const list = assert(button.closest(".list"));
+    const title = assert(list.querySelector(".-title-marker"));
     const items = list.querySelectorAll(".list-item");
     let result = `# ${title.textContent}:`
     for (const item of items) {
-        const input = item.querySelector(".-list-item-value-marker"); 
-        const label = item.querySelector(".-list-item-title-marker"); 
+        const input = assert(item.querySelector(".-list-item-value-marker")); 
+        const label = assert(item.querySelector(".-list-item-title-marker")); 
         result += `\n- [${(input.checked ? 'x' : ' ')}] ${label.textContent}`;
     }
     console.log(result);
@@ -82,7 +83,7 @@ async function copyListToClipboard(button) {
 }
 
 async function shareListToClipboard(button) {
-    const list = button.closest(".list");
+    const list = assert(button.closest(".list"));
     const link = `${location.href}lists/${list.id}`;
     console.log(link);
     await navigator.clipboard.writeText(link);
