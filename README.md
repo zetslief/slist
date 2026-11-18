@@ -9,12 +9,12 @@ Simple lists
   - Select/deselect all.
   - Item change order.
   - Clone list.
-- Shared List
-  - Add header.
-  - Add navigation to home.
+  - Consider edit mode per whole list, instead of many buttons on items. This way UI would be more explorable and cleaner.
+
 - Login
   - Add login error message when login fails.
   - Do validation.
+
 - Register
   - Add separate registration page.
   - Do validation.

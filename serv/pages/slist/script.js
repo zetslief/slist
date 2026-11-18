@@ -38,13 +38,11 @@ async function acceptRenameList(button) {
     const title = assert(list.querySelector(".-title-marker"));
     const input = assert(list.querySelector(".-list-title-input-marker")); 
     const newTitleValue = input.value;
-    console.log(`accepting renaming of '${title.textContent}' to '${input.value}'. List id: '${list.id}'`)
+    console.log(`accepting renaming of '${title.textContent}' to '${newTitleValue}'. List id: '${list.id}'`)
     const response = await fetch(`/lists/${list.id}`, {
         method : "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: newTitleValue }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(renameListDto(newTitleValue)),
     });
     if (!response.ok) {
         console.error(response);
@@ -90,5 +88,12 @@ async function shareListToClipboard(button) {
 }
 
 function newItemDto(listId, content) {
-    return { listId: listId, name: content };
+    return {
+        listId: assert(listId),
+        name: assert(content),
+    };
+}
+
+function renameListDto(newName) {
+    return { name: assert(newName) };
 }
