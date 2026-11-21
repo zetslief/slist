@@ -88,6 +88,18 @@ async function shareListToClipboard(button) {
     await navigator.clipboard.writeText(link);
 }
 
+async function removeList(button) {
+    const list = assert(button.closest(".list"));
+    const response = await fetch(`/lists/${list.id}`, {
+        method: "DELETE",
+    });
+    if (!response.ok) {
+        console.error(response);
+        return;
+    }
+    list.remove();
+}
+
 function newItemDto(listId, content) {
     return {
         listId: assert(listId),

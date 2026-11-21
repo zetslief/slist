@@ -4,8 +4,10 @@ Simple lists
 
 ## TODO:
 
+- Index
+  - Add new list must be interactive.
+
 - Lists
-  - Show progress bar.
   - Select/deselect all.
   - Item change order.
   - Clone list.

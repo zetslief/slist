@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using Serv.Db;
-using Serv.Dto;
 
 namespace Serv.DataMethods;
 
@@ -66,6 +65,17 @@ public static class ListDataMethods
         list.LastModified = DateTime.UtcNow;
         await db.SaveChangesAsync();
         return Results.Ok();
+    }
+
+    public async static Task<IResult> DeleteListAsync(Guid listId, SlistDb db)
+    {
+        var count = await db.Lists.Where(l => l.Id == listId).ExecuteDeleteAsync();
+        return count switch
+        {
+            0 => Results.BadRequest($"List not found: {listId}"),
+            1 => Results.Ok(),
+            var other => Results.InternalServerError($"Attempt to delete list '{listId}' removed {other} lists."),
+        };
     }
 
     public async static Task<IResult> AppendItemAsync(Dto.NewItem newItem, SlistDb db)
