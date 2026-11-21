@@ -6,4 +6,5 @@
   <Folder Name="/serv/">
     <Project Path="serv/serv.csproj" />
   </Folder>
+  <Project Path="serv.tests.api/serv.tests.api.csproj" />
 </Solution>
