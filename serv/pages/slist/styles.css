@@ -6,6 +6,13 @@
   padding: var(--padding);
   gap: var(--small-gap);
 
+  > .topbar {
+
+    > .progress {
+      width: 100%;
+    }
+  }
+
   &:not(-edit) {
     > .readonly-header {
       display: flex;

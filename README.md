@@ -20,7 +20,7 @@ Simple lists
   - Do validation.
 
 - Server:
-  - Check all methods. They are supposed to check user ;)
+  - Check all methods. They are supposed to check the user ;)
   - Enable Autoforgery.
   - Review auth
       - Cookie options.

@@ -22,6 +22,8 @@ public static class PageMethods
         foreach (var item in itemsData) data[item.List].Add(item);
         var slists = data.Select(pair => ComponentBuilder.FromHtml(slistComponents.Html)
             .AddChild("slisttitle", ComponentBuilder.Text(pair.Key.Title))
+            .AddData("progress-value", pair.Value.Count(i => i.Checked).ToString())
+            .AddData("progress-max", pair.Value.Count.ToString())
             .AddChild("slistitems", ComponentBuilder.List(pair.Value.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
                 .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
                 .AddData("slist-item-id", item.Id.ToString())
