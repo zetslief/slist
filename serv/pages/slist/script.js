@@ -21,6 +21,7 @@ async function addNewItem(event) {
     listItems.appendChild(newNode);
     input.value = "";
     input.focus();
+    onItemAdded(list);
 }
 
 function createItemNode(item) {
@@ -96,4 +97,27 @@ function newItemDto(listId, content) {
 
 function renameListDto(newName) {
     return { name: assert(newName) };
+}
+
+function onItemUpdated(item, checked) {
+    const list = item.closest(".list");
+    const progress = list.querySelector(".progress");
+    progress.value += checked ? 1 : -1;
+    console.log(progress.value, progress.max);
+}
+
+function onItemAdded(list) {
+    const progress = list.querySelector(".progress");
+    progress.max += 1;
+    console.log(progress.value, progress.max);
+}
+
+function onItemRemoved(item, checked) {
+    const list = item.closest(".list");
+    const progress = list.querySelector(".progress");
+    if (checked) {
+        progress.value -= 1;
+    }
+    progress.max -= 1;
+    console.log(progress.value, progress.max);
 }

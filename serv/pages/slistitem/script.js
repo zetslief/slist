@@ -10,12 +10,15 @@ async function toggleItem(input) {
     const result = await response.json();
     input.checked = result.checked; 
     console.log(result);
+    const item = input.closest(".list-item");
+    onItemUpdated?.(item, result.checked);
 }
 
 async function deleteItem(button) {
     const item = button.closest(".list-item");
     const input = item.querySelector(".-list-item-value-marker");
     const itemId = input.id;
+    const checked = input.checked;
     const response = await fetch (`/items/${itemId}`, {
         method: "DELETE",
     });
@@ -23,6 +26,7 @@ async function deleteItem(button) {
         console.error(response);
         return;
     }
+    onItemRemoved?.(item, checked);
     item.remove();
 }
 
