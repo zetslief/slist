@@ -20,17 +20,9 @@ public static class PageMethods
         Dictionary<List, List<Item>> data = await db.Lists.ToDictionaryAsync(l => l, l => new List<Item>());
         var itemsData = await db.Items.Include(i => i.List).ToArrayAsync();
         foreach (var item in itemsData) data[item.List].Add(item);
-        var slists = data.Select(pair => ComponentBuilder.FromHtml(slistComponents.Html)
-            .AddChild("slisttitle", ComponentBuilder.Text(pair.Key.Title))
-            .AddData("progress-value", pair.Value.Count(i => i.Checked).ToString())
-            .AddData("progress-max", pair.Value.Count.ToString())
-            .AddChild("slistitems", ComponentBuilder.List(pair.Value.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
-                .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
-                .AddData("slist-item-id", item.Id.ToString())
-                .AddData("checkedvalue", item.Checked ? "checked" : string.Empty)
-                .Build())))
-            .AddData("slist-id", pair.Key.Id.ToString())
-            .Build()).ToImmutableArray();
+        var slists = data
+            .Select(pair => CreateListComponent(slistComponents, slistItemComponents, pair.Key, pair.Value).Build())
+            .ToImmutableArray();
         var component = ComponentBuilder.FromHtml(indexComponents.Html)
             .AddChild("sliststyles", ComponentBuilder.FromCss(sharedComponenets.Css, indexComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
             .AddChild("slistscript", ComponentBuilder.FromJs(sharedComponenets.Js, indexComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
@@ -62,27 +54,32 @@ public static class PageMethods
         var listComponents = componentProvider.GetComponent("./pages/list");
         var slistComponents = componentProvider.GetComponent("./pages/slist");
         var slistItemComponents = componentProvider.GetComponent("./pages/slistitem");
-        var slist = ComponentBuilder.FromHtml(slistComponents.Html)
-            .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
-            .AddData("slist-id", list.Id.ToString())
-            .AddData("progress-value", items.Count(i => i.Checked).ToString())
-            .AddData("progress-max", items.Length.ToString())
-            .AddChild("slistitems", ComponentBuilder.List(items.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
-                .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
-                .AddData("slist-item-id", item.Id.ToString())
-                .AddData("checkedvalue", item.Checked ? "checked" : string.Empty)
-                .Build())))
-            .Build();
+        var slist = CreateListComponent(slistComponents, slistItemComponents, list, items);
         var component = ComponentBuilder.FromHtml(listComponents.Html)
             .AddChild("sliststyles", ComponentBuilder.FromCss(shared.Css, listComponents.Css, slistComponents.Css, slistItemComponents.Css).Build())
             .AddChild("slistscript", ComponentBuilder.FromJs(shared.Js, listComponents.Js, slistComponents.Js, slistItemComponents.Js).Build())
-            .AddChild("slist", slist)
+            .AddChild("slist", slist.Build())
             .AddChild("slistitemtemplate", ComponentBuilder.FromHtml(slistItemComponents.Html)
                 .AddChild("slistitemlabel", ComponentBuilder.Text("ITEM_TEMPLATE"))
                 .Build())
             .Build();
         return Results.Content(new HtmlTemplate().Render(component), "text/html");
     }
+
+    private static HtmlComponentBuilder CreateListComponent(
+        PageComponents slistComponents,
+        PageComponents slistItemComponents,
+        List list,
+        IReadOnlyCollection<Item> items) => ComponentBuilder.FromHtml(slistComponents.Html)
+            .AddChild("slisttitle", ComponentBuilder.Text(list.Title))
+            .AddData("slist-id", list.Id.ToString())
+            .AddData("progress-value", items.Count(i => i.Checked).ToString())
+            .AddData("progress-max", items.Count.ToString())
+            .AddChild("slistitems", ComponentBuilder.List(items.Select(item => ComponentBuilder.FromHtml(slistItemComponents.Html)
+                .AddChild("slistitemlabel", ComponentBuilder.Text(item.Name))
+                .AddData("slist-item-id", item.Id.ToString())
+                .AddData("checkedvalue", item.Checked ? "checked" : string.Empty)
+                .Build())));
 }
 
 public record PageComponents(string Html, string Css, string Js);
