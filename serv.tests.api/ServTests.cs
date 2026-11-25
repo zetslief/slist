@@ -71,6 +71,22 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
     }
 
     [Fact]
+    public async Task List_Delete()
+    {
+        await EnsureDatabaseCreatedAsync();
+
+        var client = _factory.CreateClient();
+        (await RegisterAsync(client, Admin)).EnsureSuccessStatusCode();
+
+        var list = await CreateListAsync(client, new("List"));
+        var deletedResponse = await client.DeleteAsync($"/lists/{list.Id}", CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, deletedResponse.StatusCode);
+
+        var unknownListDeleteResponse = await client.DeleteAsync($"/lists/{Guid.NewGuid()}", CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, unknownListDeleteResponse.StatusCode);
+    }
+
+    [Fact]
     public async Task List_AddItem()
     {
         await EnsureDatabaseCreatedAsync();
@@ -120,6 +136,7 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
     {
         using var scope = _factory.Services.CreateScope();
         using var db = scope.ServiceProvider.GetRequiredService<SlistDb>();
+        await db.Database.EnsureDeletedAsync(CancellationToken);
         await db.Database.EnsureCreatedAsync(CancellationToken);
     }
 
