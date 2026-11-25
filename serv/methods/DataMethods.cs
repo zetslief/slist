@@ -54,7 +54,7 @@ public static class ListDataMethods
         if (maybeUser is null) return Results.BadRequest();
         var newListEntity = db.Lists.Add(new() { User = maybeUser, Title = newList.Title, CreatedOn = DateTime.UtcNow, LastModified = DateTime.UtcNow });
         await db.SaveChangesAsync();
-        return Results.Json<Dto.List>(new(newListEntity.Entity.Id, newListEntity.Entity.Title, newListEntity.Entity.LastModified));
+        return Results.Json<Dto.List>(new(newListEntity.Entity.Id, newListEntity.Entity.Title, newListEntity.Entity.CreatedOn));
     }
 
     public async static Task<IResult> RenameListAsync(Guid listId, Dto.ListUpdate listUpdate, SlistDb db)
@@ -64,7 +64,7 @@ public static class ListDataMethods
         list.Title = listUpdate.Name;
         list.LastModified = DateTime.UtcNow;
         await db.SaveChangesAsync();
-        return Results.Ok();
+        return Results.Json<Dto.List>(new(list.Id, list.Title, list.CreatedOn));
     }
 
     public async static Task<IResult> DeleteListAsync(Guid listId, SlistDb db)

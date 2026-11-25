@@ -35,7 +35,7 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
     }
 
     [Fact]
-    public async Task CreateList()
+    public async Task List_Create()
     {
         await EnsureDatabaseCreatedAsync();
 
@@ -46,6 +46,28 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
         var createdList = await CreateListAsync(client, new("New List"));
         Assert.NotEqual(Guid.Empty, createdList.Id);
         Assert.Equal("New List", createdList.Title);
+    }
+
+    [Fact]
+    public async Task List_Rename()
+    {
+        await EnsureDatabaseCreatedAsync();
+
+        using var client = _factory.CreateClient();
+        (await RegisterAsync(client, Admin)).EnsureSuccessStatusCode();
+
+        var list = await CreateListAsync(client, new("List"));
+
+        var renameResponse = await client.PutAsJsonAsync($"/lists/{list.Id}", new Dto.ListUpdate("New List Name"), CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, renameResponse.StatusCode);
+        Assert.Equal("application/json", renameResponse.Content.Headers.ContentType?.MediaType);
+        var renamedList = await renameResponse.Content.ReadFromJsonAsync<Dto.List>(CancellationToken);
+        Assert.NotNull(renamedList);
+        Assert.Equal(list.Id, renamedList.Id);
+        Assert.NotEqual(list.Title, renamedList.Title);
+
+        var unknownListResponse = await client.PutAsJsonAsync($"/lists/{Guid.NewGuid()}", new Dto.ListUpdate("Invalid"), CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, unknownListResponse.StatusCode);
     }
 
     [Fact]
