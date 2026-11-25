@@ -43,13 +43,31 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
         var registerResponse = await RegisterAsync(client, Admin);
         registerResponse.EnsureSuccessStatusCode();
 
-        var createResponse = await client.PostAsJsonAsync("/lists/new", new Dto.NewList("Test new list"), CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, createResponse.StatusCode);
-        Assert.Equal("application/json", createResponse.Content.Headers.ContentType?.MediaType);
-        var createdList = await createResponse.Content.ReadFromJsonAsync<Dto.List>(CancellationToken);
-        Assert.NotNull(createdList);
+        var createdList = await CreateListAsync(client, new("New List"));
         Assert.NotEqual(Guid.Empty, createdList.Id);
-        Assert.Equal("Test new list", createdList.Title);
+        Assert.Equal("New List", createdList.Title);
+    }
+
+    [Fact]
+    public async Task List_AddItem()
+    {
+        await EnsureDatabaseCreatedAsync();
+
+        using var client = _factory.CreateClient();
+        (await RegisterAsync(client, Admin)).EnsureSuccessStatusCode();
+
+        var list = await CreateListAsync(client, new("Test"));
+
+        var newItemResponse = await client.PostAsJsonAsync("/items/new", new Dto.NewItem(list.Id, "Item"), CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, newItemResponse.StatusCode);
+        Assert.Equal("application/json", newItemResponse.Content.Headers.ContentType?.MediaType);
+        var newItem = await newItemResponse.Content.ReadFromJsonAsync<Dto.Item>(CancellationToken);
+        Assert.NotNull(newItem);
+        Assert.NotEqual(Guid.Empty, newItem.Id);
+        Assert.Equal("Item", newItem.Name);
+
+        var unknownListResponse = await client.PostAsJsonAsync("/items/new", new Dto.NewItem(Guid.NewGuid(), "Not an item"), CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, unknownListResponse.StatusCode);
     }
 
     private async Task<HttpResponseMessage> RegisterAsync(HttpClient client, Dto.AuthUser user)
@@ -64,6 +82,16 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
         var response = await client.PostAsync("/login", CreateFormDataFromUser(user), CancellationToken);
         output.WriteLine($"Login: {response}");
         return response;
+    }
+
+    private async Task<Dto.List> CreateListAsync(HttpClient client, Dto.NewList newList)
+    {
+        var createResponse = await client.PostAsJsonAsync("/lists/new", newList, CancellationToken);
+        output.WriteLine(createResponse.ToString());
+        Assert.Equal(HttpStatusCode.OK, createResponse.StatusCode);
+        Assert.Equal("application/json", createResponse.Content.Headers.ContentType?.MediaType);
+        return await createResponse.Content.ReadFromJsonAsync<Dto.List>(CancellationToken)
+            ?? throw new InvalidOperationException($"Failed to read payload.");
     }
 
     private async Task EnsureDatabaseCreatedAsync()
