@@ -28,3 +28,8 @@ Simple lists
       - Cookie options.
       - Auth options.
   - Add mapping between DTOs and entities.
+  - Item toggle endpoint should be `PUT`.
+
+- Tests
+  - Make good logs. Currently, it only outputs DB logs by default (which are useless).
+  - Consider not reseeding the DB so often. Mb use transactions?

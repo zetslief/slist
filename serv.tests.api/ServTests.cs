@@ -75,7 +75,7 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
     {
         await EnsureDatabaseCreatedAsync();
 
-        var client = _factory.CreateClient();
+        using var client = _factory.CreateClient();
         (await RegisterAsync(client, Admin)).EnsureSuccessStatusCode();
 
         var list = await CreateListAsync(client, new("List"));
@@ -96,16 +96,36 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
 
         var list = await CreateListAsync(client, new("Test"));
 
-        var newItemResponse = await client.PostAsJsonAsync("/items/new", new Dto.NewItem(list.Id, "Item"), CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, newItemResponse.StatusCode);
-        Assert.Equal("application/json", newItemResponse.Content.Headers.ContentType?.MediaType);
-        var newItem = await newItemResponse.Content.ReadFromJsonAsync<Dto.Item>(CancellationToken);
-        Assert.NotNull(newItem);
+        var newItem = await CreateItemAsync(client, list, new(list.Id, "Item"));
         Assert.NotEqual(Guid.Empty, newItem.Id);
         Assert.Equal("Item", newItem.Name);
 
         var unknownListResponse = await client.PostAsJsonAsync("/items/new", new Dto.NewItem(Guid.NewGuid(), "Not an item"), CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, unknownListResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task List_ToggleItem()
+    {
+        await EnsureDatabaseCreatedAsync();
+
+        using var client = _factory.CreateClient();
+        (await RegisterAsync(client, Admin)).EnsureSuccessStatusCode();
+
+        var list = await CreateListAsync(client, new("List"));
+        var newItem = await CreateItemAsync(client, list, new(list.Id, "Item"));
+
+        var toggleResponse = await client.PostAsync($"/items/{newItem.Id}/toggle", null, CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, toggleResponse.StatusCode);
+        Assert.Equal("application/json", toggleResponse.Content.Headers.ContentType?.MediaType);
+        var toggledItem = await toggleResponse.Content.ReadFromJsonAsync<Dto.Item>(CancellationToken);
+        Assert.NotNull(toggledItem);
+        Assert.Equal(newItem.Id, toggledItem.Id);
+        Assert.Equal(newItem.Name, toggledItem.Name);
+        Assert.NotEqual(newItem.Checked, toggledItem.Checked);
+
+        var unknownItemResponse = await client.PostAsync($"/items/{Guid.NewGuid()}/toggle", null, CancellationToken);
+        Assert.Equal(HttpStatusCode.BadRequest, unknownItemResponse.StatusCode);
     }
 
     private async Task<HttpResponseMessage> RegisterAsync(HttpClient client, Dto.AuthUser user)
@@ -129,6 +149,15 @@ public class ServTests(WebApplicationFactory<Program> factory, ITestOutputHelper
         Assert.Equal(HttpStatusCode.OK, createResponse.StatusCode);
         Assert.Equal("application/json", createResponse.Content.Headers.ContentType?.MediaType);
         return await createResponse.Content.ReadFromJsonAsync<Dto.List>(CancellationToken)
+            ?? throw new InvalidOperationException($"Failed to read payload.");
+    }
+
+    public async Task<Dto.Item> CreateItemAsync(HttpClient client, Dto.List list, Dto.NewItem newItem)
+    {
+        var newItemResponse = await client.PostAsJsonAsync("/items/new", new Dto.NewItem(list.Id, "Item"), CancellationToken);
+        Assert.Equal(HttpStatusCode.OK, newItemResponse.StatusCode);
+        Assert.Equal("application/json", newItemResponse.Content.Headers.ContentType?.MediaType);
+        return await newItemResponse.Content.ReadFromJsonAsync<Dto.Item>(CancellationToken)
             ?? throw new InvalidOperationException($"Failed to read payload.");
     }
 
